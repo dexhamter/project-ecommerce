@@ -1,0 +1,122 @@
+{
+    "exportFormatVersion": 2,
+    "exportTime": "2026-06-18 11:51:16",
+    "containerVersion": {
+        "path": "accounts/6351839120/containers/255822077/versions/2",
+        "accountId": "6351839120",
+        "containerId": "255822077",
+        "containerVersionId": "2",
+        "name": "v2.3.0 - GTM Foundation",
+        "description": "Initial configuration of GTM and GA4 tags on the website",
+        "container": {
+            "path": "accounts/6351839120/containers/255822077",
+            "accountId": "6351839120",
+            "containerId": "255822077",
+            "name": "Kova Studio",
+            "publicId": "GTM-NMPNZ4TV",
+            "usageContext": [
+                "WEB"
+            ],
+            "fingerprint": "1781725905234",
+            "tagManagerUrl": "https://tagmanager.google.com/#/container/accounts/6351839120/containers/255822077/workspaces?apiLink=container",
+            "features": {
+                "supportUserPermissions": true,
+                "supportEnvironments": true,
+                "supportWorkspaces": true,
+                "supportGtagConfigs": false,
+                "supportBuiltInVariables": true,
+                "supportClients": false,
+                "supportFolders": true,
+                "supportTags": true,
+                "supportTemplates": true,
+                "supportTriggers": true,
+                "supportVariables": true,
+                "supportVersions": true,
+                "supportZones": true,
+                "supportTransformations": false
+            },
+            "tagIds": [
+                "GTM-NMPNZ4TV"
+            ]
+        },
+        "tag": [
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "tagId": "4",
+                "name": "GA4 - Config",
+                "type": "googtag",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "tagId",
+                        "value": "{{CONST - GA4 Measurement ID}}"
+                    }
+                ],
+                "fingerprint": "1781783050027",
+                "firingTriggerId": [
+                    "2147479573"
+                ],
+                "tagFiringOption": "ONCE_PER_EVENT",
+                "monitoringMetadata": {
+                    "type": "MAP"
+                },
+                "consentSettings": {
+                    "consentStatus": "NOT_SET"
+                }
+            }
+        ],
+        "variable": [
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "variableId": "3",
+                "name": "CONST - GA4 Measurement ID",
+                "type": "c",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "value",
+                        "value": "G-JPWF3JGT5P"
+                    }
+                ],
+                "fingerprint": "1781783005782",
+                "formatValue": {}
+            }
+        ],
+        "builtInVariable": [
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "type": "PAGE_URL",
+                "name": "Page URL"
+            },
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "type": "PAGE_HOSTNAME",
+                "name": "Page Hostname"
+            },
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "type": "PAGE_PATH",
+                "name": "Page Path"
+            },
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "type": "REFERRER",
+                "name": "Referrer"
+            },
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "type": "EVENT",
+                "name": "Event"
+            }
+        ],
+        "fingerprint": "1781783449357",
+        "tagManagerUrl": "https://tagmanager.google.com/#/versions/accounts/6351839120/containers/255822077/versions/2?apiLink=version"
+    }
+}
