@@ -215,13 +215,13 @@ Paired with a single GA4 tag (`GA4 - Event - Ecommerce (Master)`) using `{{Event
 
 | Conversion Action | Event | Category | Value | Count | Click Window | View Window | Engaged-View Window | Attribution |
 |------------------|-------|----------|-------|-------|-------------|-------------|--------------------|-|
-| Purchase | `purchase` | Purchase | Dynamic (`value` from dataLayer) | One | 30 days | 1 day | 3 days | Linear |
-| Begin Checkout | `begin_checkout` | Begin checkout | No value | Many | 7 days | 1 day | 3 days | Linear |
+| Purchase | `purchase` | Purchase | Dynamic (`value` from dataLayer) | One | 30 days | 1 day | 3 days | Last Click |
+| Begin Checkout | `begin_checkout` | Begin checkout | No value | Many | 7 days | 1 day | 3 days | Last Click |
 
-**Attribution model:** Linear (fallback while conversion volume is below Data-driven threshold).
-Migrate to **Data-driven** attribution as soon as the account qualifies (requires sufficient conversion volume — Google evaluates this automatically and will prompt when eligible).
+**Attribution model:** Last Click (mandatory fallback — see note below).
+Migrate to **Data-driven** attribution as soon as the account qualifies (Google evaluates eligibility automatically and will prompt when conversion volume is sufficient).
 
-**Why not Last Click:** Last click attributes 100% of credit to the final interaction and ignores upper-funnel ad contributions. For a fashion brand with a multi-touch customer journey, this leads to poor optimisation decisions and falsely signals that awareness-driving campaigns are failing.
+**Platform note:** Google Ads deprecated Linear, Time Decay, Position-based, and First Click attribution models in 2022–2023. Only two models are now available: **Data-driven** and **Last Click**. Because this demo account lacks the historical conversion volume required for Data-driven attribution, Last Click is configured as the mandatory fallback. This is not a strategic preference — it is the only option available at this account's conversion volume.
 
 **Conversion lag note:** Google Ads attributes the conversion to the date of the ad click, not the purchase date. A user who clicks an ad on May 1st and buys on May 25th shows revenue on May 1st in reporting. Recent days will always show a temporary dip — this is attribution lag, not a tracking failure.
 
@@ -286,7 +286,7 @@ Variable type abbreviations: `Const` = Constant, `DLV` = Data Layer Variable, `J
 | Checkout events missing entirely | Tried to use GTM via theme.liquid for checkout events | Use Custom Pixel + fetch() to sGTM for all checkout events |
 | GTM fires on `checkout.shopify.com` but tags fail | Loaded GTM inside Custom Pixel sandbox | Remove GTM from Custom Pixel; use fetch() to sGTM directly |
 | `ecommerce` parameters bleeding between events | Missing `dataLayer.push({ ecommerce: null })` before each push | Add the null push before every ecommerce event push |
-| Attribution looks wrong in Google Ads | Using Last Click attribution | Switch to Linear; migrate to Data-driven when eligible |
+| Attribution looks wrong in Google Ads | Account below Data-driven threshold — using Last Click | Monitor eligibility in Google Ads → Conversion actions; migrate to Data-driven when prompted |
 
 ---
 

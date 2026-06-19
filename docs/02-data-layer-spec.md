@@ -7,7 +7,7 @@ The data layer spec is the contract between Shopify's theme code and GTM. It def
 This spec covers two distinct tracking environments:
 
 - **Storefront** (`fashion-sandbox.myshopify.com`) — GTM via `theme.liquid`, data pushed via `dataLayer.push()` from Liquid-rendered snippets
-- **Checkout** (`checkout.shopify.com`) — Shopify Custom Pixel, data pushed via `analytics.subscribe()` and forwarded to sGTM via `fetch()` POST
+- **Checkout** (`fashion-sandbox.myshopify.com/checkouts/...`) — Shopify Custom Pixel, data pushed via `analytics.subscribe()` and forwarded to sGTM via `fetch()` POST
 
 ---
 
@@ -33,7 +33,7 @@ STOREFRONT (fashion-sandbox.myshopify.com)
   Events: view_item_list · select_item · view_item
           add_to_cart · view_cart · remove_from_cart
 
-CHECKOUT (checkout.shopify.com — sandboxed)
+CHECKOUT (fashion-sandbox.myshopify.com/checkouts/... — same domain, sandboxed checkout UI)
   Custom Pixel subscribes to Shopify native checkout events
   event.data.checkout object provides all product + order data
   fetch() POST → sGTM endpoint directly (bypasses client GTM)
@@ -110,12 +110,15 @@ All ecommerce events include an `items` array. The schema is identical across st
 | Parameter | Type | Storefront Source | Checkout Source |
 |---|---|---|---|
 | `item_id` | string | `variant.id` (Liquid) | `item.variant.id` |
+| `item_group_id` | string | `product.id \| json` (Liquid) | `item.variant.product.id` |
 | `item_name` | string | `product.title \| json` (Liquid) | `item.title` |
 | `item_brand` | string | `"Kova Studio"` (hardcoded) | `"Kova Studio"` (hardcoded) |
 | `item_category` | string | `product.type \| json` (Liquid) | `item.variant.product.type` |
 | `item_variant` | string | `variant.title \| json` (Liquid) | `item.variant.title` |
 | `price` | number | `variant.price \| divided_by: 100.0` | `item.variant.price.amount` |
 | `quantity` | integer | `1` (default on storefront) or cart qty | `item.quantity` |
+
+**Note on `item_group_id`:** Holds the parent product ID — distinct from `item_id` which holds the variant ID. Used in GTM to construct the `shopify_GB_PRODUCTID_VARIANTID` composite identifier required for Google Ads dynamic remarketing (see Subproject 2.5). Native GA4 schema parameter — no custom dimension registration needed.
 
 **Note on `item_category`:** Uses Shopify's Product Type field (set in Shopify Admin on each product), not the collection handle. This is the only category field accessible in both storefront Liquid and the checkout sandbox payload. Set meaningful product types in Shopify Admin (e.g., `"Jackets"`, `"Tops"`, `"Trousers"`) before implementing.
 
@@ -141,6 +144,7 @@ All ecommerce events include an `items` array. The schema is identical across st
     {% for variant in product.variants limit: 1 %}
     collectionItems.push({
       item_id:       {{ variant.id | json }},
+      item_group_id: {{ product.id | json }},
       item_name:     {{ product.title | json }},
       item_brand:    "Kova Studio",
       item_category: {{ product.type | json }},
@@ -207,6 +211,7 @@ document.addEventListener('click', function(e) {
       item_list_name: {{ collection.title | json }},
       items: [{
         item_id:       String(variant.id),
+        item_group_id: String(product.id),
         item_name:     product.title,
         item_brand:    "Kova Studio",
         item_category: product.type,
@@ -244,6 +249,7 @@ document.addEventListener('click', function(e) {
       value:    {{ current_variant.price | divided_by: 100.0 }},
       items: [{
         item_id:       {{ current_variant.id | json }},
+        item_group_id: {{ product.id | json }},
         item_name:     {{ product.title | json }},
         item_brand:    "Kova Studio",
         item_category: {{ product.type | json }},
@@ -273,6 +279,7 @@ document.addEventListener('click', function(e) {
 var _kovaProductData = {
   {% assign current_variant = product.selected_or_first_available_variant %}
   item_id:       {{ current_variant.id | json }},
+  item_group_id: {{ product.id | json }},
   item_name:     {{ product.title | json }},
   item_brand:    "Kova Studio",
   item_category: {{ product.type | json }},
@@ -335,6 +342,7 @@ function pushViewCart(cartData) {
   var items = cartData.items.map(function(item) {
     return {
       item_id:       String(item.variant_id),
+      item_group_id: String(item.product_id),
       item_name:     item.product_title,
       item_brand:    "Kova Studio",
       item_category: item.product_type,
@@ -434,6 +442,7 @@ window.fetch = function() {
                 value:    deltaValue,
                 items: [{
                   item_id:       String(prevItem.variant_id),
+                  item_group_id: String(prevItem.product_id),
                   item_name:     prevItem.product_title,
                   item_brand:    "Kova Studio",
                   item_category: prevItem.product_type,
@@ -492,6 +501,23 @@ All four checkout events are handled inside a single Custom Pixel subscribed to 
 | Payment type | `event.data.checkout.transactions[0].paymentMethod.type` | e.g., `"creditCard"`, `"wallet"`, `"offsite"` |
 | Subtotal value | `event.data.checkout.subtotalPrice.amount` | MoneyV2 |
 
+### GCLID Attribution
+
+**Why URL passthrough does not work here:** The Conversion Linker's URL passthrough mode works by intercepting `<a href>` link clicks and rewriting the href before navigation. Shopify's "Check out" button does not use a standard anchor link — it fires a JavaScript redirect (`window.location.assign`) after an AJAX cart submission. The Conversion Linker cannot intercept this, so `_gcl_aw` is never appended to the checkout URL.
+
+**The fix — Cart Attributes bridge:** A Custom HTML tag (`Custom HTML - GAds GCLID Cart Stamp`) fires on `Window Loaded` across all storefront pages. It reads the `_gcl_aw` cookie written by the Conversion Linker and writes it to Shopify's cart attributes via the AJAX cart API (`/cart/update.js`). A `sessionStorage` guard ensures the API call fires at most once per browser session. Cart attributes survive the transition into Shopify checkout and are exposed natively in the Custom Pixel payload.
+
+**Extraction inside the Custom Pixel:** `checkout.attributes` is an array of `{ key, value }` objects. Find the `_gcl_aw` entry:
+
+```javascript
+var gclAw = (checkout.attributes || []).find(function(a) { return a.key === '_gcl_aw'; });
+var gclid = gclAw ? gclAw.value : undefined;
+```
+
+Include `gclid` in every `fetch()` payload to sGTM. sGTM uses this value to attribute the conversion to the originating Google Ads click. If the user did not arrive via a Google Ads click, `gclid` will be `undefined` and is omitted from the payload automatically.
+
+---
+
 ### Items Array Helper Function
 
 ```javascript
@@ -499,6 +525,7 @@ function buildItems(lineItems) {
   return lineItems.map(function(item) {
     return {
       item_id:       item.variant.id,
+      item_group_id: item.variant.product.id,
       item_name:     item.title,
       item_brand:    "Kova Studio",
       item_category: item.variant.product.type,
@@ -518,9 +545,11 @@ function buildItems(lineItems) {
 
 ```javascript
 analytics.subscribe("checkout_started", function(event) {
-  var checkout = event.data.checkout;
-  var items    = buildItems(checkout.lineItems);
-  var value    = parseFloat(checkout.subtotalPrice.amount);
+  var checkout  = event.data.checkout;
+  var items     = buildItems(checkout.lineItems);
+  var value     = parseFloat(checkout.subtotalPrice.amount);
+  var gclAw     = (checkout.attributes || []).find(function(a) { return a.key === '_gcl_aw'; });
+  var gclid     = gclAw ? gclAw.value : undefined;
 
   fetch('https://[YOUR-SGTM-ENDPOINT]/mp/collect', {
     method:  'POST',
@@ -529,6 +558,7 @@ analytics.subscribe("checkout_started", function(event) {
       event_name: 'begin_checkout',
       currency:   'GBP',
       value:      value,
+      gclid:      gclid,
       items:      items
     })
   });
@@ -545,13 +575,15 @@ analytics.subscribe("checkout_started", function(event) {
 
 ```javascript
 analytics.subscribe("checkout_shipping_info_submitted", function(event) {
-  var checkout      = event.data.checkout;
-  var items         = buildItems(checkout.lineItems);
-  var value         = parseFloat(checkout.subtotalPrice.amount);
+  var checkout        = event.data.checkout;
+  var items           = buildItems(checkout.lineItems);
+  var value           = parseFloat(checkout.subtotalPrice.amount);
   var deliveryOptions = checkout.delivery && checkout.delivery.selectedDeliveryOptions;
-  var shippingTier  = deliveryOptions && deliveryOptions[0]
-                      ? deliveryOptions[0].title
-                      : undefined;
+  var shippingTier    = deliveryOptions && deliveryOptions[0]
+                        ? deliveryOptions[0].title
+                        : undefined;
+  var gclAw           = (checkout.attributes || []).find(function(a) { return a.key === '_gcl_aw'; });
+  var gclid           = gclAw ? gclAw.value : undefined;
 
   fetch('https://[YOUR-SGTM-ENDPOINT]/mp/collect', {
     method:  'POST',
@@ -561,6 +593,7 @@ analytics.subscribe("checkout_shipping_info_submitted", function(event) {
       currency:      'GBP',
       value:         value,
       shipping_tier: shippingTier,
+      gclid:         gclid,
       items:         items
     })
   });
@@ -582,6 +615,8 @@ analytics.subscribe("payment_info_submitted", function(event) {
   var paymentType  = transactions[0] && transactions[0].paymentMethod
                      ? transactions[0].paymentMethod.type
                      : undefined;
+  var gclAw        = (checkout.attributes || []).find(function(a) { return a.key === '_gcl_aw'; });
+  var gclid        = gclAw ? gclAw.value : undefined;
 
   fetch('https://[YOUR-SGTM-ENDPOINT]/mp/collect', {
     method:  'POST',
@@ -591,6 +626,7 @@ analytics.subscribe("payment_info_submitted", function(event) {
       currency:     'GBP',
       value:        value,
       payment_type: paymentType,
+      gclid:        gclid,
       items:        items
     })
   });
@@ -613,11 +649,13 @@ analytics.subscribe("checkout_completed", function(event) {
   if (transactionId && sessionStorage.getItem('kova_purchase_' + transactionId)) return;
   if (transactionId) sessionStorage.setItem('kova_purchase_' + transactionId, '1');
 
-  var value    = parseFloat(checkout.subtotalPrice.amount);
-  var tax      = checkout.totalTax ? parseFloat(checkout.totalTax.amount) : 0;
-  var shipping = checkout.shippingLine && checkout.shippingLine.price
-                 ? parseFloat(checkout.shippingLine.price.amount)
-                 : 0;
+  var value     = parseFloat(checkout.subtotalPrice.amount);
+  var tax       = checkout.totalTax ? parseFloat(checkout.totalTax.amount) : 0;
+  var shipping  = checkout.shippingLine && checkout.shippingLine.price
+                  ? parseFloat(checkout.shippingLine.price.amount)
+                  : 0;
+  var gclAw     = (checkout.attributes || []).find(function(a) { return a.key === '_gcl_aw'; });
+  var gclid     = gclAw ? gclAw.value : undefined;
 
   fetch('https://[YOUR-SGTM-ENDPOINT]/mp/collect', {
     method:  'POST',
@@ -629,6 +667,7 @@ analytics.subscribe("checkout_completed", function(event) {
       transaction_id: transactionId,
       tax:            tax,
       shipping:       shipping,
+      gclid:          gclid,
       // Enhanced Conversions fields — requires read_customer_email scope
       user_data: {
         email:        checkout.email,
@@ -714,6 +753,8 @@ Replace `[YOUR-SGTM-ENDPOINT]` throughout the Custom Pixel with your Stape.io co
 - [ ] `add_payment_info` fires on `payment_info_submitted`; `payment_type` populated
 - [ ] `purchase` fires on `checkout_completed`; `transaction_id` is the long numeric order ID
 - [ ] `purchase` does NOT double-fire on thank-you page refresh (sessionStorage dedup)
+- [ ] `_gcl_aw` cart attribute present on checkout (`checkout.attributes` array contains `{ key: '_gcl_aw', value: 'GCL...' }`) when arriving from a Google Ads click
+- [ ] `gclid` field present in all 4 checkout event payloads (verify in sGTM request log); confirms cart attribute → Custom Pixel → sGTM chain is intact
 - [ ] `user_data.email` present in `purchase` payload (verify `read_customer_email` scope granted)
 - [ ] All MoneyV2 fields resolve to numbers, not objects
 - [ ] `item_category` populated with product type (not empty/undefined)

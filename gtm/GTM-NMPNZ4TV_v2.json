@@ -1,0 +1,462 @@
+{
+    "exportFormatVersion": 2,
+    "exportTime": "2026-06-18 22:36:55",
+    "containerVersion": {
+        "path": "accounts/6351839120/containers/255822077/versions/3",
+        "accountId": "6351839120",
+        "containerId": "255822077",
+        "containerVersionId": "3",
+        "name": "v2.5.0 - Google Ads Foundation",
+        "container": {
+            "path": "accounts/6351839120/containers/255822077",
+            "accountId": "6351839120",
+            "containerId": "255822077",
+            "name": "Kova Studio",
+            "publicId": "GTM-NMPNZ4TV",
+            "usageContext": [
+                "WEB"
+            ],
+            "fingerprint": "1781725905234",
+            "tagManagerUrl": "https://tagmanager.google.com/#/container/accounts/6351839120/containers/255822077/workspaces?apiLink=container",
+            "features": {
+                "supportUserPermissions": true,
+                "supportEnvironments": true,
+                "supportWorkspaces": true,
+                "supportGtagConfigs": false,
+                "supportBuiltInVariables": true,
+                "supportClients": false,
+                "supportFolders": true,
+                "supportTags": true,
+                "supportTemplates": true,
+                "supportTriggers": true,
+                "supportVariables": true,
+                "supportVersions": true,
+                "supportZones": true,
+                "supportTransformations": false
+            },
+            "tagIds": [
+                "GTM-NMPNZ4TV"
+            ]
+        },
+        "tag": [
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "tagId": "4",
+                "name": "GA4 - Config",
+                "type": "googtag",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "tagId",
+                        "value": "{{CONST - GA4 Measurement ID}}"
+                    }
+                ],
+                "fingerprint": "1781783050027",
+                "firingTriggerId": [
+                    "2147479573"
+                ],
+                "tagFiringOption": "ONCE_PER_EVENT",
+                "monitoringMetadata": {
+                    "type": "MAP"
+                },
+                "consentSettings": {
+                    "consentStatus": "NOT_SET"
+                }
+            },
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "tagId": "9",
+                "name": "GAds - Config",
+                "type": "googtag",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "tagId",
+                        "value": "AW-18244478477"
+                    }
+                ],
+                "fingerprint": "1781817597183",
+                "firingTriggerId": [
+                    "2147479573"
+                ],
+                "tagFiringOption": "ONCE_PER_EVENT",
+                "monitoringMetadata": {
+                    "type": "MAP"
+                },
+                "consentSettings": {
+                    "consentStatus": "NOT_SET"
+                }
+            },
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "tagId": "10",
+                "name": "GAds - Conversion Linker",
+                "type": "gclidw",
+                "parameter": [
+                    {
+                        "type": "BOOLEAN",
+                        "key": "enableCrossDomain",
+                        "value": "false"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "enableUrlPassthrough",
+                        "value": "true"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "enableCookieOverrides",
+                        "value": "false"
+                    }
+                ],
+                "fingerprint": "1781817697662",
+                "firingTriggerId": [
+                    "2147479553"
+                ],
+                "tagFiringOption": "ONCE_PER_EVENT",
+                "monitoringMetadata": {
+                    "type": "MAP"
+                },
+                "consentSettings": {
+                    "consentStatus": "NOT_SET"
+                }
+            },
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "tagId": "15",
+                "name": "GAds - Remarketing",
+                "type": "sp",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "eventItems",
+                        "value": "{{CJS - GAds Items Array}}"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "enableConversionLinker",
+                        "value": "true"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "eventValue",
+                        "value": "{{DLV - ecommerce.value}}"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "enableDynamicRemarketing",
+                        "value": "true"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "eventName",
+                        "value": "{{Event}}"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "conversionId",
+                        "value": "{{Const - GAds Conversion ID}}"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "customParamsFormat",
+                        "value": "NONE"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "rdp",
+                        "value": "false"
+                    }
+                ],
+                "fingerprint": "1781819221801",
+                "firingTriggerId": [
+                    "13"
+                ],
+                "tagFiringOption": "ONCE_PER_EVENT",
+                "monitoringMetadata": {
+                    "type": "MAP"
+                },
+                "consentSettings": {
+                    "consentStatus": "NOT_SET"
+                }
+            },
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "tagId": "17",
+                "name": "Custom HTML - GAds GCLID Cart Stamp",
+                "type": "html",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "html",
+                        "value": "<script>\n(function() {\n  // Guard: only stamp once per browser session\n  if (sessionStorage.getItem('_gcl_aw_stamped')) return;\n\n  // Read _gcl_aw cookie set by Conversion Linker\n  var match = document.cookie.match(/_gcl_aw=([^;]+)/);\n  if (!match) return;\n\n  var gclAw = match[1];\n\n  // Write to Shopify cart attributes\n  fetch('/cart/update.js', {\n    method: 'POST',\n    headers: {'Content-Type': 'application/json'},\n    body: JSON.stringify({attributes: {_gcl_aw: gclAw}})\n  }).then(function(response) {\n    if (response.ok) {\n      sessionStorage.setItem('_gcl_aw_stamped', '1');\n    }\n  }).catch(function() {\n    // Fail silently — no attribution is better than a broken page\n  });\n})();\n</script>"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "supportDocumentWrite",
+                        "value": "false"
+                    }
+                ],
+                "fingerprint": "1781821383868",
+                "firingTriggerId": [
+                    "16"
+                ],
+                "tagFiringOption": "ONCE_PER_EVENT",
+                "monitoringMetadata": {
+                    "type": "MAP"
+                },
+                "consentSettings": {
+                    "consentStatus": "NOT_SET"
+                }
+            }
+        ],
+        "trigger": [
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "triggerId": "13",
+                "name": "Trigger - CE - Ecommerce Events (Remarketing)",
+                "type": "CUSTOM_EVENT",
+                "customEventFilter": [
+                    {
+                        "type": "MATCH_REGEX",
+                        "parameter": [
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg0",
+                                "value": "{{_event}}"
+                            },
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg1",
+                                "value": "view_item_list$|select_item$|view_item$|add_to_cart$|view_cart$|remove_from_cart$|purchase$"
+                            }
+                        ]
+                    }
+                ],
+                "fingerprint": "1781818841139"
+            },
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "triggerId": "16",
+                "name": "Window Loaded",
+                "type": "WINDOW_LOADED",
+                "fingerprint": "1781821341309"
+            }
+        ],
+        "variable": [
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "variableId": "3",
+                "name": "CONST - GA4 Measurement ID",
+                "type": "c",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "value",
+                        "value": "G-JPWF3JGT5P"
+                    }
+                ],
+                "fingerprint": "1781783005782",
+                "formatValue": {}
+            },
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "variableId": "6",
+                "name": "Const - GAds Conversion ID",
+                "type": "c",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "value",
+                        "value": "18244478477"
+                    }
+                ],
+                "fingerprint": "1781817750332",
+                "formatValue": {}
+            },
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "variableId": "7",
+                "name": "DLV - ecommerce.items",
+                "type": "v",
+                "parameter": [
+                    {
+                        "type": "INTEGER",
+                        "key": "dataLayerVersion",
+                        "value": "2"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "setDefaultValue",
+                        "value": "false"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "name",
+                        "value": "ecommerce.items"
+                    }
+                ],
+                "fingerprint": "1781816622598",
+                "formatValue": {}
+            },
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "variableId": "8",
+                "name": "CJS - GAds Items Array",
+                "type": "jsm",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "javascript",
+                        "value": "function() {\n  var items = {{DLV - ecommerce.items}};\n  if (!items || !Array.isArray(items)) return [];\n  return items.map(function(item) {\n    return {\n      id: 'shopify_GB_' + item.item_group_id + '_' + item.item_id,\n      google_business_vertical: 'retail',\n      price: item.price,\n      quantity: item.quantity\n    };\n  });\n}"
+                    }
+                ],
+                "fingerprint": "1781818543736",
+                "formatValue": {}
+            },
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "variableId": "14",
+                "name": "DLV - ecommerce.value",
+                "type": "v",
+                "parameter": [
+                    {
+                        "type": "INTEGER",
+                        "key": "dataLayerVersion",
+                        "value": "2"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "setDefaultValue",
+                        "value": "false"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "name",
+                        "value": "ecommerce.value"
+                    }
+                ],
+                "fingerprint": "1781819078190",
+                "formatValue": {}
+            }
+        ],
+        "builtInVariable": [
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "type": "PAGE_URL",
+                "name": "Page URL"
+            },
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "type": "PAGE_HOSTNAME",
+                "name": "Page Hostname"
+            },
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "type": "PAGE_PATH",
+                "name": "Page Path"
+            },
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "type": "REFERRER",
+                "name": "Referrer"
+            },
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "type": "EVENT",
+                "name": "Event"
+            },
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "type": "CLICK_ELEMENT",
+                "name": "Click Element"
+            },
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "type": "CLICK_CLASSES",
+                "name": "Click Classes"
+            },
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "type": "CLICK_ID",
+                "name": "Click ID"
+            },
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "type": "CLICK_TARGET",
+                "name": "Click Target"
+            },
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "type": "CLICK_URL",
+                "name": "Click URL"
+            },
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "type": "CLICK_TEXT",
+                "name": "Click Text"
+            },
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "type": "SCROLL_DEPTH_THRESHOLD",
+                "name": "Scroll Depth Threshold"
+            },
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "type": "SCROLL_DEPTH_UNITS",
+                "name": "Scroll Depth Units"
+            },
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "type": "SCROLL_DEPTH_DIRECTION",
+                "name": "Scroll Direction"
+            }
+        ],
+        "fingerprint": "1781822196056",
+        "tagManagerUrl": "https://tagmanager.google.com/#/versions/accounts/6351839120/containers/255822077/versions/3?apiLink=version",
+        "customTemplate": [
+            {
+                "accountId": "6351839120",
+                "containerId": "255822077",
+                "templateId": "11",
+                "name": "GA4 Items to GAds Dynamic Remarketing Converter",
+                "fingerprint": "1781818005326",
+                "templateData": "___TERMS_OF_SERVICE___\n\nBy creating or modifying this file you agree to Google Tag Manager's Community\nTemplate Gallery Developer Terms of Service available at\nhttps://developers.google.com/tag-manager/gallery-tos (or such other URL as\nGoogle may provide), as modified from time to time.\n\n\n___INFO___\n\n{\n  \"type\": \"MACRO\",\n  \"id\": \"cvt_TBND2\",\n  \"version\": 1,\n  \"displayName\": \"GA4 Items to GAds Dynamic Remarketing Converter\",\n  \"description\": \"This variable template easily converts GA4 Items structure to the new GAds Remarketing event data and the old GAds Remarketing parameters (ecomm_xxx)\",\n  \"containerContexts\": [\n    \"WEB\"\n  ],\n  \"brand\": {\n    \"displayName\": \"matteo-zambon-gtm\",\n    \"id\": \"github.com_matteo-zambon-gtm\"\n  }\n}\n\n\n___TEMPLATE_PARAMETERS___\n\n[\n  {\n    \"type\": \"SELECT\",\n    \"name\": \"remarketingType\",\n    \"displayName\": \"Type\",\n    \"selectItems\": [\n      {\n        \"value\": \"event_data\",\n        \"displayValue\": \"Event Data (new)\"\n      },\n      {\n        \"value\": \"custom_parameters\",\n        \"displayValue\": \"Custom Parameters (old - ecomm_XXX)\"\n      }\n    ],\n    \"simpleValueType\": true,\n    \"defaultValue\": \"event_data\",\n    \"help\": \"You can choose the new dynamic remarketing with Event Data or the old dynamic remarketing with custom parameters\"\n  },\n  {\n    \"type\": \"GROUP\",\n    \"name\": \"remarketingParameters\",\n    \"displayName\": \"Event Type and Parameters\",\n    \"groupStyle\": \"ZIPPY_OPEN\",\n    \"subParams\": [\n      {\n        \"type\": \"SELECT\",\n        \"name\": \"event_type\",\n        \"displayName\": \"Event Type\",\n        \"selectItems\": [\n          {\n            \"value\": \"event_value\",\n            \"displayValue\": \"Event Value\"\n          },\n          {\n            \"value\": \"event_items\",\n            \"displayValue\": \"Event Items\"\n          }\n        ],\n        \"simpleValueType\": true,\n        \"help\": \"The Event Value is the total value of the products or services of GA4 items.\"\n      },\n      {\n        \"type\": \"SELECT\",\n        \"name\": \"event_data\",\n        \"displayName\": \"google_business_vertical\",\n        \"macrosInSelect\": true,\n        \"selectItems\": [\n          {\n            \"value\": \"flights\",\n            \"displayValue\": \"flights\"\n          },\n          {\n            \"value\": \"hotels\",\n            \"displayValue\": \"hotels\"\n          },\n          {\n            \"value\": \"retail\",\n            \"displayValue\": \"retail\"\n          },\n          {\n            \"value\": \"education\",\n            \"displayValue\": \"education\"\n          },\n          {\n            \"value\": \"hotel_rental\",\n            \"displayValue\": \"hotel_rental\"\n          },\n          {\n            \"value\": \"jobs\",\n            \"displayValue\": \"jobs\"\n          },\n          {\n            \"value\": \"local\",\n            \"displayValue\": \"local\"\n          },\n          {\n            \"value\": \"real_estate\",\n            \"displayValue\": \"real_estate\"\n          },\n          {\n            \"value\": \"travel\",\n            \"displayValue\": \"travel\"\n          },\n          {\n            \"value\": \"custom\",\n            \"displayValue\": \"custom\"\n          }\n        ],\n        \"simpleValueType\": true,\n        \"defaultValue\": \"retail\",\n        \"help\": \"\\u003ca href\\u003d\\\"https://support.google.com/google-ads/answer/7305793\\\" target\\u003d\\\"_blank\\\"\\u003eSee here for all information\\u003c/a\\u003e\",\n        \"enablingConditions\": [\n          {\n            \"paramName\": \"event_type\",\n            \"paramValue\": \"event_items\",\n            \"type\": \"EQUALS\"\n          }\n        ]\n      }\n    ],\n    \"enablingConditions\": [\n      {\n        \"paramName\": \"remarketingType\",\n        \"paramValue\": \"event_data\",\n        \"type\": \"EQUALS\"\n      }\n    ]\n  },\n  {\n    \"type\": \"CHECKBOX\",\n    \"name\": \"use_datalayer\",\n    \"checkboxText\": \"Use Data Layer (GA4 Items structure)\",\n    \"simpleValueType\": true,\n    \"alwaysInSummary\": true,\n    \"defaultValue\": true,\n    \"subParams\": [\n      {\n        \"type\": \"SELECT\",\n        \"name\": \"alternative_input\",\n        \"displayName\": \"Read Data from Variable\",\n        \"macrosInSelect\": true,\n        \"selectItems\": [],\n        \"simpleValueType\": true,\n        \"enablingConditions\": [\n          {\n            \"paramName\": \"use_datalayer\",\n            \"paramValue\": true,\n            \"type\": \"NOT_EQUALS\"\n          }\n        ]\n      }\n    ],\n    \"help\": \"You can use \\u003ca href\\u003d\\\"https://tagmanager.google.com/gallery/#/owners/matteo-zambon-gtm/templates/EEC-dataLayer-Builder-for-GA4\\\" target\\u003d\\\"_blank\\\"\\u003eEEC dataLayer Builder for GA4\\u003c/a\\u003e variable if you use Google Universal Analytics ecommerce object\"\n  },\n  {\n    \"type\": \"CHECKBOX\",\n    \"name\": \"use_default_events\",\n    \"checkboxText\": \"Use GA4 default events\",\n    \"simpleValueType\": true,\n    \"alwaysInSummary\": true,\n    \"defaultValue\": true,\n    \"subParams\": [\n      {\n        \"type\": \"SELECT\",\n        \"name\": \"alternative_eventName\",\n        \"displayName\": \"Read Data from Variable\",\n        \"macrosInSelect\": true,\n        \"selectItems\": [],\n        \"simpleValueType\": true,\n        \"enablingConditions\": [\n          {\n            \"paramName\": \"use_default_events\",\n            \"paramValue\": true,\n            \"type\": \"NOT_EQUALS\"\n          }\n        ]\n      }\n    ],\n    \"help\": \"You can use \\u003ca href\\u003d\\\"https://tagmanager.google.com/gallery/#/owners/matteo-zambon-gtm/templates/EEC-dataLayer-Builder-for-GA4\\\" target\\u003d\\\"_blank\\\"\\u003eEEC dataLayer Builder for GA4\\u003c/a\\u003e variable if you use Google Universal Analytics ecommerce object\"\n  },\n  {\n    \"type\": \"CHECKBOX\",\n    \"name\": \"use_default_purchase_value\",\n    \"checkboxText\": \"Use GA4 default purchase value\",\n    \"simpleValueType\": true,\n    \"alwaysInSummary\": true,\n    \"defaultValue\": true,\n    \"subParams\": [\n      {\n        \"type\": \"SELECT\",\n        \"name\": \"overwrite_purchase_value\",\n        \"displayName\": \"Read Data from Variable\",\n        \"macrosInSelect\": true,\n        \"selectItems\": [],\n        \"simpleValueType\": true,\n        \"enablingConditions\": [\n          {\n            \"paramName\": \"use_default_purchase_value\",\n            \"paramValue\": true,\n            \"type\": \"NOT_EQUALS\"\n          }\n        ]\n      }\n    ],\n    \"help\": \"You can overwrite purchase value (use this only if you have GA3 dataLayer structure)\"\n  },\n  {\n    \"type\": \"CHECKBOX\",\n    \"name\": \"use_default_purchase_order_id\",\n    \"checkboxText\": \"Use GA4 default purchase order id\",\n    \"simpleValueType\": true,\n    \"alwaysInSummary\": true,\n    \"defaultValue\": true,\n    \"subParams\": [\n      {\n        \"type\": \"SELECT\",\n        \"name\": \"overwrite_purchase_order_id\",\n        \"displayName\": \"Read Data from Variable\",\n        \"macrosInSelect\": true,\n        \"selectItems\": [],\n        \"simpleValueType\": true,\n        \"enablingConditions\": [\n          {\n            \"paramName\": \"use_default_purchase_order_id\",\n            \"paramValue\": true,\n            \"type\": \"NOT_EQUALS\"\n          }\n        ]\n      }\n    ],\n    \"help\": \"You can overwrite purchase order id(use this only if you have GA3 dataLayer structure)\",\n    \"enablingConditions\": [\n      {\n        \"paramName\": \"remarketingType\",\n        \"paramValue\": \"custom_parameters\",\n        \"type\": \"EQUALS\"\n      }\n    ]\n  }\n]\n\n\n___SANDBOXED_JS_FOR_WEB_TEMPLATE___\n\nconst dl = require('copyFromDataLayer');\nconst Math = require('Math');\nconst makeInteger = require('makeInteger');\nconst makeNumber = require('makeNumber');\nconst ga4Events = ['view_item_list', 'select_item', 'view_item', 'remove_from_cart', 'add_to_cart', 'add_to_wishlist', 'view_promotion', 'select_promotion', 'view_cart', 'begin_checkout', 'add_shipping_info', 'add_payment_info', 'purchase', 'refund'];\n\nconst remarketingType = data.remarketingType;\nvar ecommerce_items = [];\nvar ecommerce = [];\nvar event = '';\nif(data.use_datalayer === false){  \n  ecommerce_items = data.alternative_input;\n  ecommerce = data.alternative_input;\n}\nelse{\n  ecommerce_items = dl('ecommerce', 1).items;\n  ecommerce = dl('ecommerce', 1);\n}\n\nif(data.use_default_events === false){\n  event = data.alternative_eventName;\n}\nelse{\n  event = dl('event');  \n}\n\nif(ga4Events.indexOf(event) >= 0){\n  let gadsObj = {};    \n  let totalValue;\n  let prods = ecommerce_items; \n  \n  //Custom Parameters (old - ecomm_XXX) \n  if (remarketingType !== 'event_data'){\n    let page_type;\n    \n    let idList = prods.map(function(prod) {\n      if(prod.hasOwnProperty('item_id')){\n        return prod.item_id.toString();\n      }\n    });\n  \n\t  switch (event) {\n\t\t  case 'purchase':\n\t\t\tpage_type = 'purchase';\n\t\t\tbreak;\n\t\t  case 'view_item':\n\t\t\tpage_type = 'product';\n\t\t\tbreak;\n\t\t  case 'select_item':\n\t\t\tpage_type = 'product';\n\t\t\tbreak;\n\t\t  case 'add_to_cart':\n\t\t\tpage_type = 'cart';\n\t\t\tbreak;\n\t\t  case 'view_item_list':\n\t\t\tpage_type = 'category';\n\t\t\tbreak;\n\t\t}\n\t  \n\n\t  if(event === 'purchase'){\n        if(data.use_default_purchase_value === false){  \n\t\t  totalValue = data.overwrite_purchase_value;\n        }\n        else{\n      \t\ttotalValue = ecommerce.value;\n        }\n        if(data.use_default_purchase_order_id === false){  \n\t\t  gadsObj.order_id = data.overwrite_purchase_order_id;\n        }\n        else{\n          \tgadsObj.order_id = ecommerce.transaction_id;\n    \t  }\n\t  }\n\t  else{\n\t\ttotalValue = prods.reduce(function(cur, acc) {\n\t\t  if (!(acc.quantity)){\n\t\t\tacc.quantity = 1;\n\t\t  }\n\t\t  if(acc.hasOwnProperty('price')){\n\t\t\treturn cur + (acc.price * acc.quantity);\n\t\t  }\n\t\t}, 0);\n\t  }\n\n\t  let categoryList = prods.map(function(prod) {\n\t\tif(prod.hasOwnProperty('item_category')){\n\t\t  return prod.item_category.toString();\n\t\t}\n\t  });\n\t  categoryList = categoryList.filter(unique);\n\t  \n    \n    gadsObj.ecomm_prodid = idList;\n    gadsObj.ecomm_pagetype = page_type;\n    gadsObj.ecomm_totalvalue = Math.round(totalValue*100)/100;\n    gadsObj.ecomm_category = categoryList;   \n  \n    return gadsObj;\n  }\n  else\n  {\n    //event_data\n    ////event_value\n    if (data.event_type === 'event_value'){\n       if(event === 'purchase'){\n\n        if(data.use_default_purchase_value === false){  \n\t\t  totalValue = data.overwrite_purchase_value;\n        }\n        else{\n      \t\ttotalValue = ecommerce.value;\n        }\n\t  }\n\t  else{\n\t\ttotalValue = prods.reduce(function(cur, acc) {\n\t\t  if (!(acc.quantity)){\n\t\t\tacc.quantity = 1;\n\t\t  }\n\t\t  if(acc.hasOwnProperty('price')){\n\t\t\treturn cur + (acc.price * acc.quantity);\n\t\t  }\n\t\t}, 0);\n\t  }\n      return Math.round(totalValue*100)/100;\n    }\n    else{\n    ////event_items\n      let idList = prods.map(function(prod) {\n        if(prod.hasOwnProperty('item_id')){\n          let gadsObj = {};    \n          gadsObj.id = prod.item_id.toString();\n          gadsObj.google_business_vertical = data.event_data;\n          return gadsObj;\n        }\n      });\n      \n      return idList;\n    }\n    \n  }\n}\nelse{\n  return {};\n}\n\nfunction unique(value, index, self) {\n  return self.indexOf(value) === index;\n}\n\n\n___WEB_PERMISSIONS___\n\n[\n  {\n    \"instance\": {\n      \"key\": {\n        \"publicId\": \"read_data_layer\",\n        \"versionId\": \"1\"\n      },\n      \"param\": [\n        {\n          \"key\": \"keyPatterns\",\n          \"value\": {\n            \"type\": 2,\n            \"listItem\": [\n              {\n                \"type\": 1,\n                \"string\": \"event\"\n              },\n              {\n                \"type\": 1,\n                \"string\": \"ecommerce.*\"\n              }\n            ]\n          }\n        }\n      ]\n    },\n    \"clientAnnotations\": {\n      \"isEditedByUser\": true\n    },\n    \"isRequired\": true\n  }\n]\n\n\n___TESTS___\n\nscenarios: []\n\n\n___NOTES___\n\nCreated on 6/11/2021, 5:03:51 PM\n\n\n",
+                "galleryReference": {
+                    "host": "github.com",
+                    "owner": "matteo-zambon-gtm",
+                    "repository": "GA4-Items-to-GAds-Remarketing-Converter",
+                    "version": "2475ce65821246c97e8f5335fd62f12712f334f2",
+                    "signature": "51b9cc2daa648a863b945070a0b8cd4fc1c98de07a8d08958fd481dca4abeae0",
+                    "galleryTemplateId": "TBND2"
+                }
+            }
+        ]
+    }
+}
