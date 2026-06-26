@@ -106,6 +106,18 @@ _Avoid_: search page, search results
 The mechanism by which the `add_to_cart` Tracking Snippet detects a confirmed cart add without relying on a button click. Monkey-patches `window.fetch`, filters for `/cart/add.js` calls, and gates on `response.ok`. Fires only on HTTP 2xx — out-of-stock 422s and network errors are excluded. Does not read the response body; all required event parameters are sourced from the request FormData and `window._kovaProductData`.
 _Avoid_: click intercept, cart listener, fetch hook
 
+**Cart Change Intercept**:
+The mechanism by which the `remove_from_cart` Tracking Snippet (2.9) detects confirmed cart quantity changes and item removals. Monkey-patches `window.fetch` in `snippets/tracking-cart.liquid` (rendered globally via `layout/theme.liquid`), filters for `/cart/change` calls, and gates on `response.ok`. Does not read the response body. Request body is JSON (not FormData — see ADR-0012). Item data and pre-change quantity are sourced from `window._kovaCartState`.
+_Avoid_: remove intercept, change listener
+
+**`window._kovaCartState`**:
+The page-level cart state cache used by the Cart Change Intercept. Seeded on load via `fetch('/cart.js')` and updated manually after each successful `/cart/change` response (splice for full removal, quantity update for decrease). Provides the pre-change `quantity`, `price` (in cents), and item metadata needed to compute the removed delta and populate the Items Array. See ADR-0011.
+_Avoid_: cart cache, cart data
+
+**Delta Quantity**:
+The number of units actually removed in a `remove_from_cart` event. Computed as `preItem.quantity - newQuantity` where `preItem.quantity` is from `window._kovaCartState` before the change and `newQuantity` is the `quantity` field from the `/cart/change` JSON request body. Only fired if delta > 0 (i.e., quantity decreased). A `remove_from_cart` event is never fired on quantity increases.
+_Avoid_: removed quantity, qty delta
+
 ---
 
 ## Events and Mechanisms
