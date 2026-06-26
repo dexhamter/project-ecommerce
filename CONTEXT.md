@@ -120,6 +120,12 @@ _Avoid_: removed quantity, qty delta
 
 ---
 
+**Checkout Form Submit Intercept**:
+The mechanism by which the `begin_checkout` event is captured on the Storefront before the browser navigates to the Checkout sandbox. Attaches a `submit` event listener to the Cart Drawer form (`CartDrawer-Form`) and the Main Cart form (`cart`). Prevents the default form submission, pushes `begin_checkout` to the dataLayer with a GTM `eventCallback` and a 1000ms `eventTimeout`, then programmatically submits the form once the callback fires or the timeout elapses. A `checkoutFiring` boolean set on first submission prevents duplicate pushes if the user clicks the checkout button repeatedly during the delay window. When `window._kovaCartState` is null at submit time, a fallback `fetch('/cart.js')` is raced against the 1000ms timeout; if the fetch wins, the cart data is used; if the timeout wins, the form submits immediately without tracking.
+_Avoid_: checkout listener, click intercept, checkout hook
+
+---
+
 ## Events and Mechanisms
 
 **`variant:changed`**:
