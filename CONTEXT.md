@@ -72,6 +72,42 @@ _Avoid_: composite ID, remarketing ID, feed ID
 
 ---
 
+## List Tracking
+
+**`window._kovaLists`**:
+The page-level staging array for product list data on pages with multiple product sections (currently: homepage). Each section with a product grid pushes a GA4-formatted list object here via an inline `<script>` rendered by Liquid. Consumed by the Tracking Snippet at `DOMContentLoaded`. Parallel to `window._kovaProductData` on product detail pages.
+_Avoid_: list array, product lists array
+
+**`item_list_id`**:
+The stable identifier for a product list. Equals `collection.handle` on Collection Pages, a hardcoded `section.id`-scoped string on homepage sections, and `"search_results"` on the Search Results page. Must match exactly on any subsequent `select_item` event for list attribution to hold.
+_Avoid_: list ID, list identifier
+
+**`item_list_name`**:
+The human-readable label for a product list. Equals `collection.title` on Collection Pages, a hardcoded string on homepage sections, and `"Search Results"` on the Search Results page. Decoupled from display headings to prevent Theme Editor changes from fracturing GA4 list reports.
+_Avoid_: list name, list label
+
+---
+
+## Page Types
+
+**Collection Page**:
+A Shopify page type at `/collections/{handle}` that renders a paginated product grid for a single collection. Fires `view_item_list` via the Collection Tracking Snippet. The `collection.handle` and `collection.title` Liquid objects are the canonical sources for `item_list_id` and `item_list_name` respectively.
+_Avoid_: category page, product listing page, PLP
+
+**Search Results Page**:
+The Shopify search page at `/search?q=...`. Renders products from `search.results` filtered by type. Fires `view_item_list` with fixed identifiers (`"search_results"` / `"Search Results"`) regardless of the search query. Query intent is captured separately via the `search_term` GA4 parameter, not baked into the list identity.
+_Avoid_: search page, search results
+
+---
+
+## Cart Add Intercept
+
+**Cart Add Intercept**:
+The mechanism by which the `add_to_cart` Tracking Snippet detects a confirmed cart add without relying on a button click. Monkey-patches `window.fetch`, filters for `/cart/add.js` calls, and gates on `response.ok`. Fires only on HTTP 2xx — out-of-stock 422s and network errors are excluded. Does not read the response body; all required event parameters are sourced from the request FormData and `window._kovaProductData`.
+_Avoid_: click intercept, cart listener, fetch hook
+
+---
+
 ## Events and Mechanisms
 
 **`variant:changed`**:
