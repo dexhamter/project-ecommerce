@@ -27,14 +27,18 @@ A Theme Editor block that renders a Tracking Snippet. Stored in the template's J
 _Avoid_: block, liquid block
 
 **Custom Pixel**:
-Shopify's sandboxed JavaScript environment for checkout event tracking. Subscribes to native Shopify checkout events and POSTs payloads directly to sGTM. Cannot read parent DOM, cookies, or `localStorage`.
+A plain-JavaScript tracking script added via Shopify Admin → Settings → Customer Events. Runs inside a sandboxed iframe (lax sandbox — has its own isolated `window` and `document`) on the checkout page. Subscribes to Shopify's native checkout lifecycle events via the `analytics` global. A dedicated GTM container (the Checkout Pixel Container) is initialised inside this iframe; checkout events are pushed to the sandbox's local `window.dataLayer` and processed by that container. Cannot access the parent page DOM or the Storefront Container. Standard `document.cookie` access may be restricted — the `browser.cookie.get()` API is used to read first-party cookies (e.g. `_ga`) across the sandbox boundary.
 _Avoid_: web pixel, pixel
 
+**Checkout Pixel Container**:
+The dedicated GTM container that runs inside the Custom Pixel sandbox. Contains only the tags, triggers, and variables needed for checkout event tracking (`GA4 - Event - purchase`, `GAds - Conversion - Purchase`). Entirely separate from the Storefront Container (GTM-NMPNZ4TV) to prevent sandbox initialisation from firing storefront tags or generating phantom data in GA4. First published version: `v1.0.0 - Purchase Tracking`.
+_Avoid_: sandbox container, pixel GTM
+
 **dataLayer**:
-The GTM data layer array (`window.dataLayer`). Ecommerce events are pushed here from Tracking Snippets on the Storefront. Not accessible from the Custom Pixel.
+The GTM data layer array (`window.dataLayer`). Ecommerce events are pushed here from Tracking Snippets on the Storefront. Inside the Custom Pixel sandbox, a separate local `window.dataLayer` instance exists and is monitored by the Checkout Pixel Container — it is not the same array as the Storefront's dataLayer.
 
 **sGTM**:
-The server-side GTM container hosted on Stape.io. Receives Storefront events relayed from client GTM, and Checkout events POSTed directly from the Custom Pixel. Forwards to GA4 and Google Ads.
+The server-side GTM container hosted on Stape.io. Receives Storefront events relayed from the Storefront Container. Checkout events from the Checkout Pixel Container are routed through sGTM only if the GA4 tag's `server_container_url` is configured to point to the Stape.io endpoint; full sGTM integration is deferred to 2.16.
 _Avoid_: server container, server-side tag manager
 
 ---
