@@ -142,3 +142,7 @@ _Avoid_: dedup guard, double-fire guard
 **GCLID Bridge**:
 The Cart Attributes mechanism that carries the `_gcl_aw` cookie value from Storefront cookies into the Checkout sandbox. A Custom HTML tag writes the GCLID to Shopify cart attributes via `/cart/update.js` on Window Loaded. The Custom Pixel reads it from `checkout.attributes` and includes it in every sGTM payload.
 _Avoid_: GCLID cart stamp, attribution bridge
+
+**Refund Event**:
+The GA4 `refund` event. Unlike every other ecommerce event in this implementation, the Refund Event is never fired client-side in production — it originates server-side from a Shopify refund webhook handler via Measurement Protocol v2. A client-side `dataLayer.push()` (browser console) is used for QA simulation only and is not part of the production data path.
+_Avoid_: return event, revenue reversal
